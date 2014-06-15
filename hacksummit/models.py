@@ -12,6 +12,10 @@ class Lender(DatabaseModel):
   __tablename__ = 'lenders'
 
   id = Column(Integer, primary_key=True)
+  facebook_id = Column(String(200), unique=True)
+  work = Column(String(200), unique=True)
+  location = Column(String(200), unique=True)
+  hometown = Column(String(200), unique=True)
   username = Column(String(200), unique=True)
   json = Column(BLOB, doc="Raw JSON blob")
 
