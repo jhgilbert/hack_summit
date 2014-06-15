@@ -17,6 +17,20 @@ db.init_app(app)
 
 db.create_all()
 
+FACEBOOK_APP_ID = '524414764331163'
+FACEBOOK_APP_SECRET = '5cc64ca9891c35fd651a7fea6d32c0ea'
+
+oauth = OAuth(app)
+facebook = oauth.remote_app('facebook',
+  base_url='https://graph.facebook.com/',
+  request_token_url=None,
+  access_token_url='/oauth/access_token',
+  authorize_url='https://www.facebook.com/dialog/oauth',
+  consumer_key=FACEBOOK_APP_ID,
+  consumer_secret=FACEBOOK_APP_SECRET,
+  request_token_params={'scope': 'email,user_location,user_hometown,user_friends,user_work_history'}
+)
+
 @app.route('/')
 def hello():
   return 'Hello World!'
@@ -60,22 +74,6 @@ def lender(username):
   user.save()
 
   return "hi %s, you have been created" % user.username
-
-############################################
-
-FACEBOOK_APP_ID = '524414764331163'
-FACEBOOK_APP_SECRET = '5cc64ca9891c35fd651a7fea6d32c0ea'
-
-oauth = OAuth(app)
-facebook = oauth.remote_app('facebook',
-  base_url='https://graph.facebook.com/',
-  request_token_url=None,
-  access_token_url='/oauth/access_token',
-  authorize_url='https://www.facebook.com/dialog/oauth',
-  consumer_key=FACEBOOK_APP_ID,
-  consumer_secret=FACEBOOK_APP_SECRET,
-  request_token_params={'scope': 'email,user_location,user_hometown,user_friends,user_work_history'}
-)
 
 
 @app.route('/update_external_user_data')
