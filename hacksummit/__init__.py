@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect, url_for, session, request
+from flask import Flask, jsonify, redirect, url_for, session, request, abort
 from flask.ext.heroku import Heroku
 from flask_oauthlib.client import OAuth
 
@@ -140,6 +140,39 @@ def facebook_authorized(resp):
 @facebook.tokengetter
 def get_facebook_oauth_token():
   return session.get('oauth_token')
+
+
+@app.route('/lender/<lender_id>addfriend/<friend_id>')
+def add_friend(lender_id, friend_id):
+  user = db.session.query(Lender).filter(Lender.facebook_id==lender_id).first()
+  friend = db.session.query(Lender).filter(Lender.facebook_id==friend_id).first()
+
+  if user is None:
+    return "that user id doesn't exist: %s" % lender_id
+
+  if friend is None:
+    return "that friend id doesn't exist: %s" % friend_id
+
+
+  user.friends.append(friend)
+
+  return "user %s added as a friend for user %s" % (friend_id, lender_id)
+
+
+@app.route('/lender/<lender_id>/friends')
+def show_friends(lender_id):
+  user = db.session.query(Lender).filter(Lender.facebook_id==lender_id).first()
+
+  if user is None:
+    abort(404)
+
+  result = ""
+
+  # friend is a Lender object
+  for friend in user.friends:
+    result.append("<p>%s</p>" % friend.id)
+
+  return result
 
 
 @app.before_request
