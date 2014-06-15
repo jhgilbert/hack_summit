@@ -19,6 +19,7 @@ db.create_all()
 
 FACEBOOK_APP_ID = '524414764331163'
 FACEBOOK_APP_SECRET = '5cc64ca9891c35fd651a7fea6d32c0ea'
+HOME_PAGE = 'http://www.kiva.org/'
 
 oauth = OAuth(app)
 facebook = oauth.remote_app('facebook',
@@ -159,8 +160,8 @@ def facebook_authorized(resp):
   session['facebook_id'] = facebook_id
   g.user = user
 
-  action = "created" if created else "updated"
-  return "facebook_id %s %s" % (facebook_id, action)
+  # Redirect to the kiva home page
+  return redirect(HOME_PAGE)
 
 
 @facebook.tokengetter
