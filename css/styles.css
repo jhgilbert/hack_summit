@@ -85,9 +85,33 @@
 }
 
 .carousel-element {
-    margin-right: 13px;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 190px;
+    background-position: center top;
+}
+
+.sm-preview {
+    position: absolute;
+    bottom: 5px;
+    width: 322px;
+    padding: 10px;
+}
+
+.carousel-element:hover {
+    cursor: pointer;
+    box-shadow: 0 0 6px black;
 }
 
 .sm-preview {
     background-image: url('../img/70.png');
+}
+
+.browse-header {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    color: #4b9123;
+    font-family: 'museoSlab500';
 }
