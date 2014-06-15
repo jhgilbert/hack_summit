@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request, g
+from  sqlalchemy.sql.expression import func
 
 import random
 
@@ -30,7 +31,7 @@ def current_user_integrated_feed():
 
 @this.route('/lender/picks', methods=["GET"])
 def current_user_recommended():
-  query = db.session.query(Loan).limit(get_limit())
+  query = db.session.query(Loan).order_by(func.random()).limit(get_limit())
   return jsonify_list(query)
 
 @this.route('/staff/picks', methods=["GET"])
