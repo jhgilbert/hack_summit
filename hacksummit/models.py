@@ -19,7 +19,10 @@ class Lender(DatabaseModel):
   username = Column(String(200), unique=True)
   json = Column(BLOB, doc="Raw JSON blob")
 
-  friends = relationship('Lender', secondary=lender_friends)
+  friends = relationship('Lender', secondary=lender_friends,
+                        primaryjoin="Lender.id==lender_friends.c.lender_id",
+                        secondaryjoin="Lender.id==lender_friends.c.friend_id",
+)
 
 
 class Loan_Lenders(DatabaseModel):
