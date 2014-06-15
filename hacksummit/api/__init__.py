@@ -27,7 +27,10 @@ def current_user_integrated_feed():
   popular_items = get_popular_picks(limit=get_fractional(limit, POPULAR_PERCENT))
   friend_limit = get_friend_picks(limit=get_fractional(limit, POPULAR_PERCENT))
 
-
+@this.route('/loans/all', methods=["GET"])
+def all_loans():
+  query = db.session.query(Loan).order_by(func.random()).all()
+  return jsonify_list(query)
 
 @this.route('/lender/picks', methods=["GET"])
 def current_user_recommended():
