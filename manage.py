@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 
 from flask.ext.script import Manager
 from hacksummit import app, db
@@ -17,6 +17,11 @@ def runserver():
   os.putenv('DATABASE_URL', app.config['SQLALCHEMY_DATABASE_URI'])
   db.create_all()
   app.run(host='0.0.0.0', debug=True)
+
+@manager.command
+def nuke_db():
+  db.drop_all()
+  db.create_all()
 
 @manager.option('-d', '--dir', dest='data_dir')
 def import_data(data_dir):
