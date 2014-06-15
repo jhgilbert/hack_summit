@@ -1,0 +1,82 @@
+@font-face {
+    font-family: museoSlab300;
+    src: url(Museo_Slab_300.woff);
+}
+
+@font-face {
+    font-family: museoSlab500;
+    src: url(Museo_Slab_500.woff);
+}
+
+@font-face {
+    font-family: proximaNovaReg;
+    src: url(ProximaNova-Reg.woff);
+}
+
+@font-face {
+    font-family: proximaNovaLight;
+    src: url(ProximaNova-Light.woff);
+}
+
+.appeal {
+    background-image: url('../img/70.png');
+    padding: 20px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+.appeal-button {
+    margin-top: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-family: 'proximaNovaReg';
+    font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
+.appeal-head {
+    font-family: 'museoSlab300';
+}
+
+.appeal-copy {
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.progress-info {
+    margin-bottom: 10px;
+}
+
+.percent-complete {
+    display: inline-block;
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    height: 15px;
+    background-color: #74b446;
+}
+
+.percent-to-go {
+    display: inline-block;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    height: 15px;
+    background-color: white;
+}
+
+.how-it-works {
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 18px;
+    color: white;
+    background-color: #4b9123;
+    font-family: 'proximaNovaLight';
+    padding: 3px 10px;
+}
+
+.how-it-works:hover {
+    text-decoration: underline;
+}
+
+
