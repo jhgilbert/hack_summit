@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect, url_for, session, request, abort
+from flask import Flask, jsonify, redirect, url_for, session, request, abort, g
 from flask.ext.heroku import Heroku
 from flask_oauthlib.client import OAuth
 
@@ -124,14 +124,40 @@ def facebook_authorized(resp):
     user.hometown = me.data['hometown']['name']
   except KeyError:
     pass
+  user.save()
 
   # Populate from friends
   myfriends = facebook.get('/me/friends')
+  current_friends = user.friends[:]
+  debug_string = ""
+  try:
+    for friend_data in myfriends.data['data']:
+      friend_id = friend_data['id']
+      friend = db.session.query(Lender).filter(Lender.facebook_id==friend_id).first()
+      if user is None or friend is None:
+        continue
+      # if user is not yet a friend add them bidirectionally
+      if friend not in user.friends:
+        user.friends.append(friend)
+        friend.friends.append(user)
+        friend.save()
+        debug_string += " add %s/%s" % (user.facebook_id, friend.facebook_id)
+      else:
+        current_friends.remove(friend)
+        debug_string += " keep %s/%s" % (user.facebook_id, friend.facebook_id)
+  except KeyError:
+    pass
 
+  # delete the old friends who are no longer
+  for removed in current_friends:
+    user.friends.remove(removed)
+    removed.friends.remove(user)
+    debug_string += " remove %s/%s" % (user.facebook_id, friend.facebook_id)
   user.save()
 
-  # ???
-  # g.user = user
+  # Save global and session information for later
+  session['facebook_id'] = facebook_id
+  g.user = user
 
   action = "created" if created else "updated"
   return "facebook_id %s %s" % (facebook_id, action)
@@ -142,7 +168,7 @@ def get_facebook_oauth_token():
   return session.get('oauth_token')
 
 
-@app.route('/lender/<lender_id>addfriend/<friend_id>')
+@app.route('/lender/<lender_id>/addfriend/<friend_id>')
 def add_friend(lender_id, friend_id):
   user = db.session.query(Lender).filter(Lender.facebook_id==lender_id).first()
   friend = db.session.query(Lender).filter(Lender.facebook_id==friend_id).first()
@@ -152,7 +178,6 @@ def add_friend(lender_id, friend_id):
 
   if friend is None:
     return "that friend id doesn't exist: %s" % friend_id
-
 
   user.friends.append(friend)
 
@@ -170,18 +195,17 @@ def show_friends(lender_id):
 
   # friend is a Lender object
   for friend in user.friends:
-    result.append("<p>%s</p>" % friend.id)
+    result += ("<p>%s</p>" % friend.facebook_id)
 
   return result
 
 
 @app.before_request
 def before_request():
-  # look in session for fb id,
-  # then look in db
-  # g.user = Lender
+  if 'facebook_id' in session:
+    user = db.session.query(Lender).filter(Lender.facebook_id==session['facebook_id']).first()
+    g.user = user
 
-  pass
 
 if __name__ == '__main__':
   app.run()
