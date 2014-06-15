@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect, url_for, session, request, abort
+from flask import Flask, jsonify, redirect, url_for, session, request, abort, render_template
 from flask.ext.heroku import Heroku
 from flask_oauthlib.client import OAuth
 
@@ -32,8 +32,8 @@ facebook = oauth.remote_app('facebook',
 )
 
 @app.route('/')
-def hello():
-  return 'Hello World!'
+def home():
+  return render_template("index.html")
 
 @app.route('/loan/')
 def all_loans():

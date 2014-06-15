@@ -7,10 +7,10 @@ function mainCtrl($scope) {
 kivaApp.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.when('/', {
-            templateUrl: '../templates/home.html'
+            templateUrl: '/static/templates/home.html'
         }).
         when('/browse', {
-            templateUrl: '../templates/browse.html'
+            templateUrl: '/static/templates/browse.html'
         }).
         otherwise({
             redirectTo: '/'

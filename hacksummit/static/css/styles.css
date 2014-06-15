@@ -64,6 +64,30 @@
     background-color: #74b446;
 }
 
+.friend-funding-icon {
+    display: inline-block;
+    margin-top: 0px;
+}
+
+.friend-funding {
+    background-image: url('../img/80.png');
+    width: 290px;
+    position: absolute;
+    top: 5px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+    font-family: 'proximaNovaBold';
+}
+
+.friend-funding-text {
+    display: inline-block;
+    margin-top: 5px;
+    position: absolute;
+    top: 4px;
+}
+
 .percent-to-go {
     display: inline-block;
     border-bottom-right-radius: 20px;
@@ -97,14 +121,17 @@
     margin-top: 5px;
     margin-bottom: 5px;
     height: 190px;
-    background-position: center top;
 }
 
 .sm-preview {
     position: absolute;
-    bottom: 5px;
-    width: 322px;
+    right: 5px;
+    bottom: 4px;
+    width: 200px;
+    height: 191px;
     padding: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .carousel-element:hover {
@@ -113,7 +140,13 @@
 }
 
 .sm-preview {
-    background-image: url('../img/70.png');
+    background-image: url('../img/80.png');
+}
+
+.sm-preview-country {
+    font-size: 14px;
+    margin-top: 5px;
+    font-family: 'proximaNovaBold';
 }
 
 .sm-preview-head {
