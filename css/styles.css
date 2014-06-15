@@ -79,4 +79,15 @@
     text-decoration: underline;
 }
 
+.browse-container {
+    background-color: #f7f7f2;
+    min-height: 900px;
+}
 
+.carousel-element {
+    margin-right: 13px;
+}
+
+.sm-preview {
+    background-image: url('../img/70.png');
+}
