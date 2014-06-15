@@ -30,7 +30,6 @@ class Lender(DatabaseModel):
                         backref='friends_with'
   )
 
-
 class Loan_Lenders(DatabaseModel):
   __tablename__ = 'loan_lenders'
 
