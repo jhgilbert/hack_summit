@@ -21,7 +21,6 @@ def runserver():
 @manager.option('-d', '--dir', dest='data_dir')
 def import_data(data_dir):
 
-
   for ModelClass in [Loan]:
     model_name = ModelClass.__tablename__
 
