@@ -1,6 +1,13 @@
 from database import DatabaseModel, db
-from sqlalchemy import Column, Integer, String, BLOB, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, BLOB, DateTime, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
+
+# junction table for
+lender_friends = Table('friends', db.metadata,
+                       
+  Column('lender_id', Integer, ForeignKey('lenders.id'), primary_key=True),
+  Column('friend_id', Integer, ForeignKey('lenders.id'), primary_key=True)
+)
 
 class Loan(DatabaseModel):
   __tablename__ = 'loans'
@@ -20,9 +27,10 @@ class Lender(DatabaseModel):
   json = Column(BLOB, doc="Raw JSON blob")
 
   friends = relationship('Lender', secondary=lender_friends,
-                        primaryjoin="Lender.id==lender_friends.c.lender_id",
-                        secondaryjoin="Lender.id==lender_friends.c.friend_id",
-)
+                        primaryjoin="lenders.id==lender_friends.c.lender_id",
+                        secondaryjoin="lenders.id==lender_friends.c.friend_id",
+                        backref='friends_with'
+  )
 
 
 class Loan_Lenders(DatabaseModel):
@@ -40,8 +48,3 @@ class Recommendation(DatabaseModel):
   score = Column(Integer)
   json = Column(BLOB, doc="Raw JSON blob")
 
-# junction table for
-lender_friends = db.Table('friends',
-  db.Column('lender_id', db.Integer, db.ForeignKey('lenders.id')),
-  db.Column('friend_id', db.Integer, db.ForeignKey('lenders.id'))
-)
