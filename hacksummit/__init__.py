@@ -25,6 +25,7 @@ def all_loans():
 
 @app.route('/loan/<int:loan_id>')
 def loan(loan_id):
-  loan = Loan.get_or_404(loan_id)
-  return "Found loan #%s" % loan.id
+  loan = Loan.query.get_or_404(loan_id)
+  return loan.json
+
 
