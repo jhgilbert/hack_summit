@@ -23,50 +23,39 @@ def nuke_db():
   db.drop_all()
   db.create_all()
 
-@manager.option('-d', '--dir', dest='data_dir')
-def import_data(data_dir):
 
-  for ModelClass in [Loan]:
-    model_name = ModelClass.__tablename__
+@manager.option('-f', '--file', dest='filename')
+def load(filename):
 
-    print "Importing records for %s" % model_name
+  print "importing records from %s" % filename
 
-    import_dir = os.path.join(data_dir, model_name)
+  fh = open(filename, 'r')
+  raw_json = json.load(fh)
+  fh.close()
 
-    if not os.path.exists(import_dir):
-      print "No fixture data exists for %s" % model_name
+  import_count = 0
+
+  for record in raw_json['loans']:
+    if record['status'] == 'paid':
+      continue
+    if 'image' not in record or 'id' not in record['image']:
       continue
 
-    LIMIT = 10
-    current = 0
-    for json_filename in os.listdir(import_dir):
-      current += 1
-      if current > LIMIT:
-        break
+    model = Loan()
 
-      try:
-        fh = open(os.path.join(import_dir, json_filename), 'r')
-        raw_json = json.load(fh)
-        fh.close()
-      except IOError as e:
-        print "Can't load file %s %s" % (json_filename, e)
-        continue
+    for key in record:
+      if hasattr(model, key):
+        setattr(model, key, record[key])
 
-      print "...%s" % json_filename
+    if hasattr(model, 'json'):
+      setattr(model, 'json', json.dumps(record))
 
-      for record in raw_json[model_name]:
-        model = ModelClass()
+    db.session.add(model)
+    import_count += 1
 
-        for key in record:
-          if hasattr(model, key):
-            setattr(model, key, record[key])
+  db.session.commit()
 
-        if hasattr(model, 'json'):
-          setattr(model, 'json', json.dumps(record))
-
-        db.session.add(model)
-
-    db.session.commit()
+  print "imported %s loans" % import_count
 
 if __name__ == "__main__":
     manager.run()

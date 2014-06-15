@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect, url_for, session, request, abort, g
+from flask import Flask, jsonify, redirect, url_for, session, request, abort, render_template, g
 from flask.ext.heroku import Heroku
 from flask_oauthlib.client import OAuth
 
@@ -32,8 +32,8 @@ facebook = oauth.remote_app('facebook',
 )
 
 @app.route('/')
-def hello():
-  return 'Hello World!'
+def home():
+  return render_template("index.html")
 
 @app.route('/loan/')
 def all_loans():
@@ -168,7 +168,8 @@ def get_facebook_oauth_token():
   return session.get('oauth_token')
 
 
-@app.route('/lender/<lender_id>/addfriend/<friend_id>')
+@app.route('/lender/<lender_id>/'
+           'addfriend/<friend_id>')
 def add_friend(lender_id, friend_id):
   user = db.session.query(Lender).filter(Lender.facebook_id==lender_id).first()
   friend = db.session.query(Lender).filter(Lender.facebook_id==friend_id).first()
@@ -207,5 +208,5 @@ def before_request():
     g.user = user
 
 
-if __name__ == '__main__':
-  app.run()
+from api import this as api_views
+app.register_blueprint(api_views, url_prefix='/api')
