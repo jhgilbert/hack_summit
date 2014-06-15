@@ -78,17 +78,17 @@ def lender(username):
 
 @app.route('/update_external_user_data')
 def index():
-  return redirect(url_for('login'))
+  return redirect(url_for('oauth'))
 
 
-@app.route('/login')
-def login():
+@app.route('/oauth')
+def oauth():
   return facebook.authorize(callback=url_for('facebook_authorized',
     next=request.args.get('next') or request.referrer or None,
     _external=True))
 
 
-@app.route('/login/authorized')
+@app.route('/oauth/authorized')
 @facebook.authorized_handler
 def facebook_authorized(resp):
   if resp is None:
