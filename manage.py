@@ -33,11 +33,11 @@ def load(filename):
   raw_json = json.load(fh)
   fh.close()
 
+  import_count = 0
+
   for record in raw_json['loans']:
     if record['status'] == 'paid':
-      print "...skipping, it's paid"
       continue
-
 
     model = Loan()
 
@@ -49,8 +49,11 @@ def load(filename):
       setattr(model, 'json', json.dumps(record))
 
     db.session.add(model)
+    import_count += 1
 
   db.session.commit()
+
+  print "imported %s loans" % import_count
 
 if __name__ == "__main__":
     manager.run()
