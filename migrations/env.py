@@ -3,8 +3,8 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
-from hacksummit import app
-from hacksummit.database import db
+import os
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,7 +18,17 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = db.Model.metadata
+#target_metadata = db.Model.metadata
+
+target_metadata = None
+
+URL = os.environ.get('DATABASE_URL')
+
+if URL is None:
+  import imp
+  config_file = os.path.join(os.getcwd(), 'hacksummit/default_config.py')
+  app_config = imp.load_source('hacksummit.default_config', config_file)
+  URL = app_config.SQLALCHEMY_DATABASE_URI
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -37,8 +47,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
-    context.configure(url=url, target_metadata=target_metadata)
+    context.configure(url=URL, target_metadata=target_metadata)
 
     with context.begin_transaction():
         context.run_migrations()
@@ -52,7 +61,7 @@ def run_migrations_online():
     """
     engine = engine_from_config(
                 config.get_section(config.config_ini_section),
-                url=app.config['SQLALCHEMY_DATABASE_URI'],
+                url=URL,
                 prefix='sqlalchemy.',
                 poolclass=pool.NullPool)
 

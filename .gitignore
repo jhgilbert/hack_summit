@@ -2,6 +2,8 @@ MANIFEST
 *.pyc
 *~
 
+hacksummit.db
+
 .idea/
 .tox*
 .env
