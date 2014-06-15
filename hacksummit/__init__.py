@@ -141,5 +141,14 @@ def facebook_authorized(resp):
 def get_facebook_oauth_token():
   return session.get('oauth_token')
 
+
+@app.before_request
+def before_request():
+  # look in session for fb id,
+  # then look in db
+  # g.user = Lender
+
+  pass
+
 if __name__ == '__main__':
   app.run()
