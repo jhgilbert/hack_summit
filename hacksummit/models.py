@@ -3,15 +3,13 @@ from sqlalchemy import Column, Integer, String, BLOB, DateTime, ForeignKey, Tabl
 from sqlalchemy.orm import relationship, backref
 
 # junction table for
-lender_friends = Table('friends', db.metadata,
-                       
-  Column('lender_id', Integer, ForeignKey('lenders.id'), primary_key=True),
-  Column('friend_id', Integer, ForeignKey('lenders.id'), primary_key=True)
+lender_friends = db.Table('friends',
+  db.Column('lender_id', db.Integer, db.ForeignKey('lenders.id'), primary_key=True),
+  db.Column('friend_id', db.Integer, db.ForeignKey('lenders.id'), primary_key=True)
 )
 
 class Loan(DatabaseModel):
   __tablename__ = 'loans'
-
   id = Column(Integer, primary_key=True)
   json = Column(BLOB, doc="Raw JSON blob")
 
@@ -27,8 +25,8 @@ class Lender(DatabaseModel):
   json = Column(BLOB, doc="Raw JSON blob")
 
   friends = relationship('Lender', secondary=lender_friends,
-                        primaryjoin="lenders.id==lender_friends.c.lender_id",
-                        secondaryjoin="lenders.id==lender_friends.c.friend_id",
+                        primaryjoin="lenders.c.id==friends.c.lender_id",
+                        secondaryjoin="lenders.c.id==friends.c.friend_id",
                         backref='friends_with'
   )
 
