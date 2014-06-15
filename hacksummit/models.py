@@ -1,5 +1,5 @@
 from database import DatabaseModel, db
-from sqlalchemy import Column, Integer, String, BLOB, DateTime, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, BLOB, DateTime, ForeignKey, Table, Boolean
 from sqlalchemy.orm import relationship, backref
 
 # junction table for
@@ -11,6 +11,7 @@ lender_friends = db.Table('friends',
 class Loan(DatabaseModel):
   __tablename__ = 'loans'
   id = Column(Integer, primary_key=True)
+  is_staff_pick = Column(Boolean)
   json = Column(BLOB, doc="Raw JSON blob")
 
 class Lender(DatabaseModel):
