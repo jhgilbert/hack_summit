@@ -142,7 +142,8 @@ def get_facebook_oauth_token():
   return session.get('oauth_token')
 
 
-@app.route('/lender/<lender_id>addfriend/<friend_id>')
+@app.route('/lender/<lender_id>/'
+           'addfriend/<friend_id>')
 def add_friend(lender_id, friend_id):
   user = db.session.query(Lender).filter(Lender.facebook_id==lender_id).first()
   friend = db.session.query(Lender).filter(Lender.facebook_id==friend_id).first()
@@ -180,8 +181,7 @@ def before_request():
   # look in session for fb id,
   # then look in db
   # g.user = Lender
-
   pass
 
-if __name__ == '__main__':
-  app.run()
+from api import this as api_views
+app.register_blueprint(api_views, url_prefix='/api')
