@@ -1,1 +1,1 @@
-web: gunicorn hacksummit:app
+web: honcho -f ProcfileHoncho start
