@@ -23,11 +23,11 @@ def nuke_db():
   db.drop_all()
   db.create_all()
 
+
 @manager.option('-f', '--file', dest='filename')
 def load(filename):
 
   print "importing records from %s" % filename
-
 
   fh = open(filename, 'r')
   raw_json = json.load(fh)
@@ -37,6 +37,8 @@ def load(filename):
 
   for record in raw_json['loans']:
     if record['status'] == 'paid':
+      continue
+    if 'image' not in record or 'id' not in record['image']:
       continue
 
     model = Loan()
